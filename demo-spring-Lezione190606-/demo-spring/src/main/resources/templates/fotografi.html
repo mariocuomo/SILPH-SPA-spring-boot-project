@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/html">
+
+<head>
+<link href="../static/css/fotografi.css" th:href="@{/css/fotografi.css}"
+	rel="stylesheet" />
+</head>
+<body>
+	
+	<div align="center">
+		<img style="padding-top: 5%" 
+			width="250" th:src="@{images/fotografo.jpg}" />
+	</div>
+	<div align="center">
+		<h4>ECCO LA LISTA DEI FOTOGRAFI</h4>
+	</div>
+	<div align="center" style="padding-top: 1%">
+		<div class="dropdown" align="center">
+			<button class="dropbtn">Fotografi</button>
+			<div class="dropdown-content">
+				<a th:each="fotografo : ${fotografi}" th:text="${fotografo.nome}"
+					th:href="@{'/fotografo' + '/' + ${fotografo.id}}" /></a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
