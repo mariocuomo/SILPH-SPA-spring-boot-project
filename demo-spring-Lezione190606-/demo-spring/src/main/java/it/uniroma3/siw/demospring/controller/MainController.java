@@ -7,6 +7,7 @@ import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,13 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import it.uniroma3.siw.demospring.model.Album;
 import it.uniroma3.siw.demospring.model.Fotografo;
 import it.uniroma3.siw.demospring.model.Studente;
+import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
 import it.uniroma3.siw.demospring.services.FotografoService;
 import it.uniroma3.siw.demospring.services.StudenteService;
 import it.uniroma3.siw.demospring.services.StudenteValidator;
+import it.uniroma3.siw.demospring.services.UserService;
+//import it.uniroma3.siw.demospring.services.UserService;
 import it.uniroma3.siw.demospring.services.Service;
 
 
@@ -35,6 +40,9 @@ public class MainController {
 
 	@Autowired
 	AlbumService albumService;
+
+	@Autowired
+	UserService userService;
 
 	@Autowired
 	Service service;
@@ -56,6 +64,14 @@ public class MainController {
 
 	@RequestMapping(value="/entra", method=RequestMethod.GET)
 	public String entra(Model model, @RequestParam String action) {
+
+		User user1 = new User();
+		user1.setUsername("mario");
+		user1.setPassword("mariopassword");
+
+		User user2 = new User();
+		user2.setUsername("francesca");
+		user2.setPassword("francescapassword");
 
 		Fotografo fotografo1 = new Fotografo();
 		fotografo1.setNome("Mario");
@@ -85,12 +101,14 @@ public class MainController {
 		albumService.salva(album2);
 		albumService.salva(album3);
 		albumService.salva(album4);
+		userService.salva(user1);
+		userService.salva(user2);
 
 
 		if( action.equals("visitatore") )
 			return "scelta.html";
 		else
-			return "";
+			return "login.html";
 	}
 
 	@RequestMapping(value="/fotografi", method=RequestMethod.GET)	
@@ -105,4 +123,13 @@ public class MainController {
 		model.addAttribute("albums", albumService.tutti());
 		return "albums.html";
 	}
+
+	@RequestMapping(value="/login", method= {RequestMethod.GET, RequestMethod.POST})	
+	public String autorizzato(Model model) {
+		
+		return "index.html";
+	}
+
+
 }
+
