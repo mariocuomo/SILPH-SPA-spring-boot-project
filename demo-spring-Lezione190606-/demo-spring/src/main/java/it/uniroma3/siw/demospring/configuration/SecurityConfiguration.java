@@ -15,9 +15,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 		.authorizeRequests()
 		.antMatchers("/css/**").permitAll()
-		.anyRequest().authenticated()
+		.antMatchers("/autorizzato").authenticated()
 		.and()
-		.formLogin()
+		.formLogin().defaultSuccessUrl("/autorizzato", true)
 		//.loginPage("/login").permitAll()
 		.and()
 		.logout().permitAll();

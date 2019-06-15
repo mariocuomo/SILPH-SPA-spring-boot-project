@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/html">
+
+<head>
+<link href="../static/css/fotografoForm.css" th:href="@{/css/fotografoForm.css}"
+	rel="stylesheet" />
+</head>
+<body>
+	<div align="center">
+		<img style="padding-top: 5%" width="250"
+			th:src="@{images/fotografo.jpg}" /> <br>
+		<h4>Inserisci i dati di uno fotografo</h4>
+		<form th:action="@{/addFotografo}" method="POST" th:object="${fotografo}">
+			<table>
+				<tr>
+					<td>Nome:</td>
+					<td><input type="text" th:field="*{nome}" /></td>
+					<td th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></td>
+				</tr>
+				<tr>
+					<td>Cognome:</td>
+					<td><input type="text" th:field="*{cognome}" /></td>
+					<td th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}"></td>
+				</tr>
+				<tr>
+					<td><br>
+						<button class="dropbtn" type="submit">Invio</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
+<!--  -->

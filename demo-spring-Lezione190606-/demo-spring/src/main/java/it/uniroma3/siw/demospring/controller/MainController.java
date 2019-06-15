@@ -24,7 +24,9 @@ import it.uniroma3.siw.demospring.model.Fotografo;
 import it.uniroma3.siw.demospring.model.Studente;
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
+import it.uniroma3.siw.demospring.services.AlbumValidator;
 import it.uniroma3.siw.demospring.services.FotografoService;
+import it.uniroma3.siw.demospring.services.FotografoValidator;
 import it.uniroma3.siw.demospring.services.StudenteService;
 import it.uniroma3.siw.demospring.services.StudenteValidator;
 import it.uniroma3.siw.demospring.services.UserService;
@@ -37,10 +39,15 @@ public class MainController {
 
 	@Autowired
 	FotografoService fotografoService;
+	@Autowired
+	FotografoValidator fotografoValidator;
+
 
 	@Autowired
 	AlbumService albumService;
-
+	@Autowired
+	AlbumValidator albumValidator;
+	
 	@Autowired
 	UserService userService;
 
@@ -107,8 +114,10 @@ public class MainController {
 
 		if( action.equals("visitatore") )
 			return "scelta.html";
-		else
+		else {
+			model.addAttribute("user",new User());
 			return "login.html";
+		}
 	}
 
 	@RequestMapping(value="/fotografi", method=RequestMethod.GET)	
@@ -124,12 +133,44 @@ public class MainController {
 		return "albums.html";
 	}
 
-	@RequestMapping(value="/login", method= {RequestMethod.GET, RequestMethod.POST})	
+	@RequestMapping(value="/autorizzato", method= {RequestMethod.GET, RequestMethod.POST})	
 	public String autorizzato(Model model) {
-		
-		return "index.html";
+		return "amministratore.html";
 	}
 
+	@RequestMapping(value="/salvaFotografo", method= {RequestMethod.GET, RequestMethod.POST})	
+	public String IntentoaggiungiFotografo(Model model) {
+		model.addAttribute("fotografo",new Fotografo());
+		return "fotografoForm.html";
+	}
+
+	@RequestMapping(value="/addFotografo", method= {RequestMethod.GET, RequestMethod.POST})	
+	public String aggiungiFotografo(Model model,@Valid @ModelAttribute Fotografo fotografo, BindingResult bindingResult) {
+		fotografoValidator.validate(fotografo, bindingResult);
+		if(bindingResult.hasErrors())
+			return "fotografoForm.html";
+		else {
+			fotografoService.salva(fotografo);
+			return "";
+		}
+	}
+	
+	@RequestMapping(value="/salvaAlbum", method= {RequestMethod.GET, RequestMethod.POST})	
+	public String IntentoaggiungiAlbum(Model model) {
+		model.addAttribute("album",new Album());
+		return "albumForm.html";
+	}
+
+	@RequestMapping(value="/addAlbum", method= {RequestMethod.GET, RequestMethod.POST})	
+	public String aggiungiAlbum(Model model,@Valid @ModelAttribute Album album, BindingResult bindingResult) {
+		albumValidator.validate(album, bindingResult);
+		if(bindingResult.hasErrors())
+			return "albumForm.html";
+		else {
+			albumService.salva(album);
+			return "";
+		}
+	}
 
 }
 

@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
+<link href="../static/css/amministratore.css"
+	th:href="@{/css/amministratore.css}" rel="stylesheet" />
+<meta charset="utf-8">
 <title>Insert title here</title>
 </head>
 <body>
-PRIVATE!!!!!!
+	<div align="center">
+		<img style="padding-top: 5%" width="250"
+			th:src="@{images/amministratore.jpg}" />
+	</div>
+	<div align="center">
+		<h1>Benvenuto!</h1>
+		<h3>Scegli una tra le seguenti attività</h3>
+		<div class="dropdown" align="center">
+			<button class="dropbtn">Attività</button>
+			<div class="dropdown-content">
+				<a href="/salvaFotografo">Salva fotografo</a> <a href="/salvaAlbum">Salva
+					album</a> <a href="/salvaFotografia">Salva fotografia</a> <a
+					href="/visualizzaRichieste">Visualizza richieste</a>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
