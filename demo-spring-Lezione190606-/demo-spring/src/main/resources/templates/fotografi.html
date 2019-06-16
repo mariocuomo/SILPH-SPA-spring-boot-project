@@ -19,7 +19,7 @@
 		<div class="dropdown" align="center">
 			<button class="dropbtn">Fotografi</button>
 			<div class="dropdown-content">
-				<a th:each="fotografo : ${fotografi}" th:text="${fotografo.cognome}"
+				<a th:each="fotografo : ${fotografi}" th:text="${fotografo.nome}"
 					th:href="@{'/fotografo' + '/' + ${fotografo.id}}" /></a>
 			</div>
 		</div>

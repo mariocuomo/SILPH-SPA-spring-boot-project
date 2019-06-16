@@ -20,13 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import it.uniroma3.siw.demospring.model.Album;
-import it.uniroma3.siw.demospring.model.Fotografia;
 import it.uniroma3.siw.demospring.model.Fotografo;
 import it.uniroma3.siw.demospring.model.Studente;
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
 import it.uniroma3.siw.demospring.services.AlbumValidator;
-import it.uniroma3.siw.demospring.services.FotografiaValidator;
 import it.uniroma3.siw.demospring.services.FotografoService;
 import it.uniroma3.siw.demospring.services.FotografoValidator;
 import it.uniroma3.siw.demospring.services.StudenteService;
@@ -56,10 +54,7 @@ public class MainController {
 	@Autowired
 	Service service;
 
-	private Fotografia fotografia;
-	@Autowired
-	FotografiaValidator fotografiaValidator;
-	
+
 	@RequestMapping(value = "fotografo/{id}", method = RequestMethod.GET)
 	public String getFotografo(@PathVariable ("id") Long id, Model model) {
 		if(id!=null) {			
@@ -144,7 +139,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value="/salvaFotografo", method= {RequestMethod.GET, RequestMethod.POST})	
-	public String intentoaggiungiFotografo(Model model) {
+	public String IntentoaggiungiFotografo(Model model) {
 		model.addAttribute("fotografo",new Fotografo());
 		return "fotografoForm.html";
 	}
@@ -156,12 +151,12 @@ public class MainController {
 			return "fotografoForm.html";
 		else {
 			fotografoService.salva(fotografo);
-			return "fineOperazione.html";
+			return "";
 		}
 	}
 
 	@RequestMapping(value="/salvaAlbum", method= {RequestMethod.GET, RequestMethod.POST})	
-	public String intentoaggiungiAlbum(Model model) {
+	public String IntentoaggiungiAlbum(Model model) {
 		model.addAttribute("fotografi", fotografoService.tutti());
 		model.addAttribute("album",new Album());
 		return "albumForm.html";
@@ -179,67 +174,13 @@ public class MainController {
 			Fotografo fotografo;
 			fotografo= fotografoService.FotografoPerId(id);
 			album.setFotografo(fotografo);
+			int a =0;
 			album.setIdFotografo("");
 			albumService.salva(album);
 			return "fineOperazione.html";
 		}
 	}
 
-	@RequestMapping(value="/menuAmministratore", method= {RequestMethod.GET, RequestMethod.POST})	
-	public String fineOperazione(Model model) {
-		return "amministratore.html";
-	}
-
-	@RequestMapping(value="/salvaFotografia", method= {RequestMethod.GET, RequestMethod.POST})	
-	public String intentosalvaFotografia(Model model) {
-		model.addAttribute("fotografi", fotografoService.tutti());
-		return "fotografoUploadFoto.html";
-	}
-
-	@RequestMapping(value = "fotografoUploadFoto/{id}", method = RequestMethod.GET)
-	public String fotografoUploadFoto(@PathVariable ("id") Long id, Model model) {
-		if(id!=null) {
-			this.fotografia = new Fotografia();
-			Fotografo fotografo = this.fotografoService.FotografoPerId(id);
-			fotografia.setFotografo(fotografo);
-			List<Album> albums = service.albumDiArtista(albumService.tutti(), id);
-			model.addAttribute("fotografo", fotografo);
-			model.addAttribute("albums", albums);
-			return "albumUploadFoto.html";
-		}else {
-			//damodificare
-			model.addAttribute("fotografi", this.fotografoService.tutti());
-			return "fotografi.html";
-		}
-	}
-
-	@RequestMapping(value = "albumUploadFoto/{id}", method = RequestMethod.GET)
-	public String albumUploadFoto(@PathVariable ("id") Long id, Model model) {
-		if(id!=null) {
-			fotografia.setAlbum(albumService.AlbumPerId(id));
-			model.addAttribute("fotografia",fotografia);
-			return "uploadFoto.html";
-		}else {
-			//damodificare
-			model.addAttribute("fotografi", this.fotografoService.tutti());
-			return "albums.html";
-		}
-	}
-
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String uploadFoto(@Valid @ModelAttribute Fotografia fotografia, Model model, BindingResult bindingResult) {
-		fotografiaValidator.validate(fotografia, bindingResult);
-		if(bindingResult.hasErrors()) {
-			return "uploadFoto.html";
-		}
-		else {
-			fotografia.setFotografo(this.fotografia.getFotografo());
-			fotografia.setAlbum(this.fotografia.getAlbum());
-			
-			/****codice per salvare su storage****/
-			return"";
-		}
-	}
 }
 
 
