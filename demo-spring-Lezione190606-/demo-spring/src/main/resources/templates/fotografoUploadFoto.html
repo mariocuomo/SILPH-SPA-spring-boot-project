@@ -7,20 +7,20 @@
 	rel="stylesheet" />
 </head>
 <body>
-	
+
 	<div align="center">
-		<img style="padding-top: 5%" 
-			width="250" th:src="@{images/fotografo.jpg}" />
+		<img style="padding-top: 5%" src="../images/fotografo.jpg"
+			width="250" />
 	</div>
 	<div align="center">
-		<h4>ECCO LA LISTA DEI FOTOGRAFI</h4>
+		<h4>SELEZIONA IL FOTOGRAFO</h4>
 	</div>
 	<div align="center" style="padding-top: 1%">
 		<div class="dropdown" align="center">
 			<button class="dropbtn">Fotografi</button>
 			<div class="dropdown-content">
 				<a th:each="fotografo : ${fotografi}" th:text="${fotografo.cognome}"
-					th:href="@{'/fotografo' + '/' + ${fotografo.id}}" /></a>
+					th:href="@{'/fotografoUploadFoto' + '/' + ${fotografo.id}}" /></a>
 			</div>
 		</div>
 	</div>
