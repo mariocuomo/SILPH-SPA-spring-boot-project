@@ -3,8 +3,8 @@
 	xmlns="http://www.w3.org/1999/html">
 
 <head>
-<link href="../static/css/fotografoForm.css" th:href="@{/css/fotografoForm.css}"
-	rel="stylesheet" />
+<link href="../static/css/fotografoForm.css"
+	th:href="@{/css/fotografoForm.css}" rel="stylesheet" />
 </head>
 <body>
 	<div align="center">
@@ -21,10 +21,22 @@
 				<tr>
 					<td>Descrizione:</td>
 					<td><input type="text" th:field="*{descrizione}" /></td>
-					<td th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}"></td>
+					<td th:if="${#fields.hasErrors('descrizione')}"
+						th:errors="*{descrizione}"></td>
 				</tr>
 				<tr>
+					<td>Scegli il fotografo:</td>
+					<td>
+						<ul style="list-style: none;">
+							<li th:each="fotografo : ${fotografi}"><input
+								th:text="${fotografo.cognome}" type="radio" name="joke"
+								th:value="${fotografo.id}" th:field="*{idFotografo}" /></li>
+						</ul>
+					</td>
+				<tr>
+				<tr>
 					<td><br>
+
 						<button class="dropbtn" type="submit">Invio</button></td>
 				</tr>
 			</table>

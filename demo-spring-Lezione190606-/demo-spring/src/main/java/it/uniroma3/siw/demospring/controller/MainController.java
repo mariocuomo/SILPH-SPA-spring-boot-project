@@ -47,7 +47,7 @@ public class MainController {
 	AlbumService albumService;
 	@Autowired
 	AlbumValidator albumValidator;
-	
+
 	@Autowired
 	UserService userService;
 
@@ -154,23 +154,33 @@ public class MainController {
 			return "";
 		}
 	}
-	
+
 	@RequestMapping(value="/salvaAlbum", method= {RequestMethod.GET, RequestMethod.POST})	
 	public String IntentoaggiungiAlbum(Model model) {
+		model.addAttribute("fotografi", fotografoService.tutti());
 		model.addAttribute("album",new Album());
 		return "albumForm.html";
 	}
 
-	@RequestMapping(value="/addAlbum", method= {RequestMethod.GET, RequestMethod.POST})	
+	@RequestMapping(value="/addAlbum", method= RequestMethod.POST)	
 	public String aggiungiAlbum(Model model,@Valid @ModelAttribute Album album, BindingResult bindingResult) {
 		albumValidator.validate(album, bindingResult);
-		if(bindingResult.hasErrors())
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("fotografi", fotografoService.tutti());
 			return "albumForm.html";
+		}
 		else {
+			Long id = Long.valueOf(album.getIdFotografo()).longValue();
+			Fotografo fotografo;
+			fotografo= fotografoService.FotografoPerId(id);
+			album.setFotografo(fotografo);
+			int a =0;
+			album.setIdFotografo("");
 			albumService.salva(album);
-			return "";
+			return "fineOperazione.html";
 		}
 	}
 
 }
+
 

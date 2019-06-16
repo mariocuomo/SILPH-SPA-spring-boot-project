@@ -17,6 +17,7 @@ public class Album {
 	private Long id;
 	private String nome;
 	private String descrizione;
+	private String idFotografo;
 
 	@OneToMany(mappedBy = "album")
 	private List<Fotografia> fotografie;
@@ -53,6 +54,12 @@ public class Album {
 	}
 	public void setFotografo(Fotografo fotografo) {
 		this.fotografo = fotografo;
+	}
+	public String getIdFotografo() {
+		return idFotografo;
+	}
+	public void setIdFotografo(String idFotografo) {
+		this.idFotografo = idFotografo;
 	}
 	
 	
