@@ -15,16 +15,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 		.authorizeRequests()
 		.antMatchers("/css/**").permitAll()
-		.antMatchers("/autorizzato").authenticated()
+		.antMatchers("/autorizzato", "/salvaFotografo", 
+				"/addFotografo", "/salvaAlbum", 
+				"/addAlbum", "/menuAmministratore",
+				"/salvaFotografia","/fotografoUploadFoto/*",
+				"/albumUploadFoto/*","/upload").authenticated()
 		.and()
 		.formLogin().defaultSuccessUrl("/autorizzato", true)
 		//.loginPage("/login").permitAll()
 		.and()
-		.logout().permitAll();
+		.logout().permitAll()
+		.and()
+		.csrf().disable();
 	}
-	
-	 @Bean
-	 public static NoOpPasswordEncoder passwordEncoder() {
-	  return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-	 }
+
+	@Bean
+	public static NoOpPasswordEncoder passwordEncoder() {
+		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+	}
 }

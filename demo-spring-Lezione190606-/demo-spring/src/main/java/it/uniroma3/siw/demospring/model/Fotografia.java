@@ -17,6 +17,7 @@ public class Fotografia {
 	private Long id;
 	private String nome;
 	private String descrizione;
+	private String link;
 	
 	@ManyToOne
 	private Album album;
@@ -53,6 +54,12 @@ public class Fotografia {
 	}
 	public void setFotografo(Fotografo fotografo) {
 		this.fotografo = fotografo;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
 	}
 	
 	

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/html">
+<body>
+	<div align="center">
+		<img style="padding-top: 5%" width="250"
+			th:src="@{../images/ordini.jpg}" />
+		<h4>Ecco la lista degli ordini in attesa di valutazione</h4>
+		<ul style="list-style-type: none;">
+			<li th:each="ordine : ${ordini}"><b><a
+					th:href="@{'ordine' + '/' + ${ordine.id}}" th:text="${ordine.id}"></a></b>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

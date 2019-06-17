@@ -1,0 +1,21 @@
+label:before {
+  content: url("https://cdn1.iconfinder.com/data/icons/windows8_icons_iconpharm/26/unchecked_checkbox.png");
+  position: absolute;
+  z-index: 100;
+  background: white;
+}
+:checked+label:before {
+  content: url("https://cdn1.iconfinder.com/data/icons/windows8_icons_iconpharm/26/checked_checkbox.png");
+  background: white;
+}
+input[type=checkbox] {
+  display: none;
+}
+/*pure cosmetics:*/
+img {
+  width: 150px;
+  height: 150px;
+}
+label {
+  margin: 10px;
+}

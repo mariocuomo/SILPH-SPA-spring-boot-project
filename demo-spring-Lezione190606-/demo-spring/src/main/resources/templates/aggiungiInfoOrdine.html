@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/html">
+
+<head>
+<link href="../static/css/aggiungiInfoOrdine.css"
+	th:href="@{/css/aggiungiInfoOrdine.css}" rel="stylesheet" />
+</head>
+<body>
+	<div align="center">
+		<h1>Ecco le foto selezionate!</h1>
+
+		<div align="center" class="gallery"
+			th:each="fotografia : ${fotografie}">
+			<a target="_blank" th:href="${fotografia.link}"> <img
+				th:src="${fotografia.link}" th:alt="${fotografia.descrizione}"
+				width="600" height="400">
+			</a>
+			<div class="desc" th:text="${fotografia.descrizione}"></div>
+		</div>
+
+		<div>
+			<h4>Inserisci i dati per completare l'ordinazione</h4>
+			<form th:action="@{/completa}" method="POST" th:object="${ordine}">
+				<table>
+					<tr>
+						<td>Nome:</td>
+						<td><input type="text" th:field="*{nome}" /></td>
+						<td th:if="${#fields.hasErrors('nome')}" th:errors="*{email}"></td>
+					</tr>
+					<tr>
+						<td>Email:</td>
+						<td><input type="text" th:field="*{email}" /></td>
+						<td th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
+					</tr>
+					<tr>
+						<td><br>
+							<button class="dropbtn" type="submit">Invio</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

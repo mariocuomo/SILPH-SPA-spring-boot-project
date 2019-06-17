@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/html">
+
+<head>
+<link href="../static/css/aggiungiInfoOrdine.css"
+	th:href="@{/css/aggiungiInfoOrdine.css}" rel="stylesheet" />
+</head>
+<body>
+	<div align="center">
+		<h1>Ecco alcune informazioni sull'ordine</h1>
+		<div>
+			Ordine numero: <span th:text="${ordine.id}"></span>
+		</div>
+		<div>
+			Nome cliente: <span th:text="${ordine.nome}"></span>
+		</div>
+		<div>
+			Email cliente: <span th:text="${ordine.email}"></span>
+		</div>
+		<div align="center" class="gallery"
+			th:each="fotografia : ${fotografie}">
+			<a target="_blank" th:href="${fotografia.link}"> <img
+				th:src="${fotografia.link}" th:alt="${fotografia.descrizione}"
+				width="600" height="400">
+			</a>
+			<div class="desc" th:text="${fotografia.descrizione}"></div>
+		</div>
+	</div>
+</body>
+</html>

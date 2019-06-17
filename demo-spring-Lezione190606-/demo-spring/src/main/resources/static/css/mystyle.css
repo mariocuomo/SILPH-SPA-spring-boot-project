@@ -6,7 +6,7 @@ li {
   display: inline-block;
 }
 
-input[type="checkbox"][id^="cb"] {
+input[type="checkbox"]{
   display: none;
 }
 
@@ -44,8 +44,8 @@ label::before {
 }
 
 label img {
-  height: 100px;
-  width: 100px;
+  height: 250px;
+  width: 250px;
   transition-duration: 0.2s;
   transform-origin: 50% 50%;
 }
