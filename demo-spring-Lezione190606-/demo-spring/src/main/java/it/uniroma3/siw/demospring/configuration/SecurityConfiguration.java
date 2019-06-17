@@ -19,7 +19,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/addFotografo", "/salvaAlbum", 
 				"/addAlbum", "/menuAmministratore",
 				"/salvaFotografia","/fotografoUploadFoto/*",
-				"/albumUploadFoto/*","/upload").authenticated()
+				"/albumUploadFoto/*","/upload",
+				"/ordine/*","/visualizzaRichieste").authenticated()
 		.and()
 		.formLogin().defaultSuccessUrl("/autorizzato", true)
 		//.loginPage("/login").permitAll()

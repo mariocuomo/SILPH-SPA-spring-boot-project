@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -98,8 +100,12 @@ public class MainController {
 		if( action.equals("visitatore") )
 			return "scelta.html";
 		else if( action.equals("admin")) {
-			model.addAttribute("user",new User());
-			return "login.html";
+		    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		    if (authentication == null) {
+				model.addAttribute("user",new User());
+				return "login.html";		    }
+		    else
+		    	return "amministratore.html";
 		}else {
 			User user1 = new User();
 			user1.setUsername("mario");
