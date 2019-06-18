@@ -1,9 +1,15 @@
 package it.uniroma3.siw.demospring.services;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.portable.InputStream;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.demospring.model.Album;
 import it.uniroma3.siw.demospring.model.Fotografia;
@@ -61,4 +67,5 @@ public class Service {
 		}
 		return fotografieOrdinatee;
 	}
+
 }

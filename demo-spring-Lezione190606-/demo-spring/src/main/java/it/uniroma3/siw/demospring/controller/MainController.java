@@ -1,12 +1,17 @@
 package it.uniroma3.siw.demospring.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import org.omg.CORBA.portable.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +27,13 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import it.uniroma3.siw.demospring.model.Album;
 import it.uniroma3.siw.demospring.model.Fotografia;
@@ -78,6 +89,27 @@ public class MainController {
 	OrdineService ordineService;
 	List<Fotografia> selezionate;
 
+
+
+
+	@Autowired
+	private AmazonS3 amazonS3Client;
+
+	private void uploadFileToS3bucket(String fileName, File file, String bucketName) {
+		amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
+	}
+
+
+	@Bean
+	public AmazonS3 amazonS3Client(AWSCredentialsProvider credentialsProvider,
+			@Value("${cloud.aws.region.static}") String region) {
+		return AmazonS3ClientBuilder
+				.standard()
+				.withCredentials(credentialsProvider)
+				.withRegion(region)
+				.build();
+	}
+
 	@RequestMapping(value = "fotografo/{id}", method = RequestMethod.GET)
 	public String getFotografo(@PathVariable ("id") Long id, Model model) {
 		if(id!=null) {			
@@ -96,17 +128,14 @@ public class MainController {
 	public String entra(Model model, @RequestParam(defaultValue = "nulla") String action) {
 		if( action.equals("nulla") )
 			return "index.html";
-		
+
 		if( action.equals("visitatore") )
 			return "scelta.html";
 		else if( action.equals("admin")) {
-		    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		    if (authentication == null) {
-				model.addAttribute("user",new User());
-				return "login.html";		    }
-		    else
-		    	return "amministratore.html";
-		}else {
+			model.addAttribute("user",new User());
+			return "login.html";
+		}
+		else {
 			User user1 = new User();
 			user1.setUsername("mario");
 			user1.setPassword("mariopassword");
@@ -197,7 +226,7 @@ public class MainController {
 		model.addAttribute("albums", albumService.tutti());
 		return "albums.html";
 	}
-	
+
 	@RequestMapping(value = "album/{id}", method = RequestMethod.GET)
 	public String getAlbum(@PathVariable ("id") Long id, Model model) {
 		if(id!=null) {	
@@ -231,7 +260,7 @@ public class MainController {
 	public String completaAcquisto(Model model,@Valid @ModelAttribute Ordine ordine, BindingResult bindingResult) {
 		ordineValidator.validate(ordine, bindingResult);
 		if(bindingResult.hasErrors()) {
-			model.addAttribute("ordine", new Ordine());
+			//model.addAttribute("ordine", new Ordine());
 			model.addAttribute("fotografie", selezionate);
 			return "aggiungiInfoOrdine.html";
 		}
@@ -248,15 +277,15 @@ public class MainController {
 		return "amministratore.html";
 	}
 
-	
-	
+
+
 	@RequestMapping(value="/visualizzaRichieste", method= {RequestMethod.GET, RequestMethod.POST})	
 	public String tutteLeRichieste(Model model) {
 		List<Ordine> ordines = ordineService.tutti();
 		model.addAttribute("ordini",ordines);
 		return "ordini.html";
 	}
-	
+
 	@RequestMapping(value = "ordine/{id}", method = RequestMethod.GET)
 	public String getOrdine(@PathVariable ("id") Long id, Model model) {
 		if(id!=null) {	
@@ -270,7 +299,7 @@ public class MainController {
 			return "ordini.html";
 		}
 	}
-	
+
 	@RequestMapping(value="/salvaFotografo", method= {RequestMethod.GET, RequestMethod.POST})	
 	public String intentoaggiungiFotografo(Model model) {
 		model.addAttribute("fotografo",new Fotografo());
@@ -355,7 +384,10 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String uploadFoto(@Valid @ModelAttribute Fotografia fotografia, Model model, BindingResult bindingResult) {
+	public String uploadFoto(@Valid @ModelAttribute Fotografia fotografia, 
+			Model model, BindingResult bindingResult, 
+			@RequestParam("file") MultipartFile file,
+			HttpServletRequest request) {
 		fotografiaValidator.validate(fotografia, bindingResult);
 		if(bindingResult.hasErrors()) {
 			return "uploadFoto.html";
@@ -366,7 +398,19 @@ public class MainController {
 			fotografia.setLink("https://i1.wp.com/www.cybercloud.guru/wp-content/uploads/2018/03/s3.png");
 			fotografiaService.salva(fotografia);
 
+
 			/****codice per salvare su storage****/
+			File convFile = new File(file.getOriginalFilename());
+			try {
+				  file.transferTo(convFile);
+			} catch (IOException e1) {
+				return "erroreFile.html";
+			}
+
+			convFile.getPath();
+			
+			this.uploadFileToS3bucket("siw-bucket", convFile, "prova");
+
 			return "fineOperazione.html";
 		}
 	}
