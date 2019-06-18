@@ -157,11 +157,16 @@ public class MainController {
 
 	@RequestMapping(value="/acquista", method= RequestMethod.GET)	
 	public String aggiungiInfo(Model model, HttpServletRequest request) {
-		model.addAttribute("ordine", new Ordine());
 		String[] arrayDiFoto = request.getParameterValues("images");
+		if(arrayDiFoto == null) {
+			model.addAttribute("fotografie", fotografiaService.tutti());
+			model.addAttribute("errore","Non hai selezionato nessuna foto!");
+			return "fotografie.html";
+		}
 		Long[] arrayDiFotoLongs = service.convertiStringInLong(arrayDiFoto);
 		selezionate = service.fotografieSelezionate(fotografiaService.tutti(), arrayDiFotoLongs);
 		model.addAttribute("fotografie", selezionate);
+		model.addAttribute("ordine", new Ordine());
 		return "aggiungiInfoOrdine.html";
 	}
 

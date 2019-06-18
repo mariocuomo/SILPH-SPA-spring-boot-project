@@ -9,14 +9,17 @@
 <body>
 	<div align="center">
 		<h1>Ecco tutte le foto dei fotografi!</h1>
+		<div>
+			<span th:text="${errore}" ></span>
+		</div>
 		<form th:action="@{/acquista}" method="get">
 
 			<div>
 				<ul>
 					<li th:each="fotografia : ${fotografie}"><input
-						type="checkbox" th:id="${fotografia.id}" th:name="images" th:value="${fotografia.id}"/> <label
-						th:for="${fotografia.id}"> <img
-							th:src="${fotografia.link}" th:value="images">
+						type="checkbox" th:id="${fotografia.id}" th:name="images"
+						th:value="${fotografia.id}" /> <label th:for="${fotografia.id}">
+							<img th:src="${fotografia.link}" th:value="images">
 					</label></li>
 				</ul>
 			</div>
