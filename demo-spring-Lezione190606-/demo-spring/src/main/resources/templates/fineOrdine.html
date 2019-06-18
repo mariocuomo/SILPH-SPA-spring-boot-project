@@ -14,6 +14,10 @@
 		<img src="../static/images/ok.jpg" width="500"
 			th:src="@{images/ok.jpg}" />
 		<h1>Operazione completata con successo</h1>
+		<div>
+			A breve riceverai la conferma dell'ordine all'indirizzo: <span
+				th:text="${email}"></span>
+		</div>
 
 		<div align="center">
 			<form th:action="@{/entra}" method="get">

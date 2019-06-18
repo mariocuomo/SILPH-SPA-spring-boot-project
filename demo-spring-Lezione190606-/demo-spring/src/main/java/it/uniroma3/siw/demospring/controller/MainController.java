@@ -13,7 +13,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,13 +31,11 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import it.uniroma3.siw.demospring.model.Album;
 import it.uniroma3.siw.demospring.model.Fotografia;
 import it.uniroma3.siw.demospring.model.Fotografo;
-import it.uniroma3.siw.demospring.model.Mail;
 import it.uniroma3.siw.demospring.model.Ordine;
 import it.uniroma3.siw.demospring.model.RigaOrdine;
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
 import it.uniroma3.siw.demospring.services.AlbumValidator;
-import it.uniroma3.siw.demospring.services.EmailService;
 import it.uniroma3.siw.demospring.services.FotografiaService;
 import it.uniroma3.siw.demospring.services.FotografiaValidator;
 import it.uniroma3.siw.demospring.services.FotografoService;
@@ -199,7 +196,8 @@ public class MainController {
 					service.inviaMail(ordine);
 				} catch (MessagingException e) {
 					return "fineOrdine";
-				}					
+				}
+				model.addAttribute("email", ordine.getEmail());
 				return "fineOrdine";
 
 			}
