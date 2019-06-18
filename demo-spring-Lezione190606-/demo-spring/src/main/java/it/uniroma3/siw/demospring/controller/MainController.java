@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -118,7 +119,7 @@ public class MainController {
 			model.addAttribute("user",new User());
 			prossimaVista = "login.html";
 		}
-		
+
 		return prossimaVista;
 	}
 
@@ -174,15 +175,22 @@ public class MainController {
 	public String completaAcquisto(Model model,@Valid @ModelAttribute Ordine ordine, BindingResult bindingResult) {
 		ordineValidator.validate(ordine, bindingResult);
 		if(bindingResult.hasErrors()) {
-			//model.addAttribute("ordine", new Ordine());
 			model.addAttribute("fotografie", selezionate);
 			return "aggiungiInfoOrdine.html";
 		}
 		else {
-			List<RigaOrdine> righeOrdine = service.creaRigheOrdine(selezionate);
-			ordine.setRigheOrdine(righeOrdine);
-			ordineService.salva(ordine);
-			return "fineOrdine";
+			if(!EmailValidator.getInstance().isValid(ordine.getEmail()))
+			{
+				model.addAttribute("erroreEmail", "Email non valida");
+				model.addAttribute("fotografie", selezionate);
+				return "aggiungiInfoOrdine.html";
+			}
+			else {
+				List<RigaOrdine> righeOrdine = service.creaRigheOrdine(selezionate);
+				ordine.setRigheOrdine(righeOrdine);
+				ordineService.salva(ordine);
+				return "fineOrdine";
+			}
 		}
 	}
 
@@ -315,11 +323,11 @@ public class MainController {
 			/****codice per salvare su storage****/
 			File convFile = new File(file.getOriginalFilename());
 			try {
-				  file.transferTo(convFile);
+				file.transferTo(convFile);
 			} catch (IOException e1) {
 				return "erroreFile.html";
 			}
-			
+
 			this.uploadFileToS3bucket("siw-bucket", convFile, "prova");
 
 			return "fineOperazione.html";
