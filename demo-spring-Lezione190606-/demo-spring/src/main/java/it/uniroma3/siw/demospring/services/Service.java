@@ -3,14 +3,22 @@ package it.uniroma3.siw.demospring.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.uniroma3.siw.demospring.model.Album;
 import it.uniroma3.siw.demospring.model.Fotografia;
+import it.uniroma3.siw.demospring.model.Mail;
+import it.uniroma3.siw.demospring.model.Ordine;
 import it.uniroma3.siw.demospring.model.RigaOrdine;
 
 @Component
 public class Service {
+	@Autowired
+	private EmailService emailService;
 
 	public List<Album> albumDiArtista(List<Album> albums, Long id) {
 		ArrayList<Album> albumsDiArtista=new ArrayList<>();
@@ -39,7 +47,7 @@ public class Service {
 			}
 		}
 		return fotografieSelezionatee;
-	
+
 	}
 
 	public List<RigaOrdine> creaRigheOrdine(List<Fotografia> selezionate) {
@@ -60,6 +68,17 @@ public class Service {
 			fotografieOrdinatee.add(fotografia);
 		}
 		return fotografieOrdinatee;
+	}
+
+	public void inviaMail(Ordine ordine) throws MessagingException {
+		Mail mail = new Mail();
+		mail.setFrom("cuomomario@hotmail.com");
+		mail.setTo(ordine.getEmail());
+		mail.setSubject("Conferma ordine presso SILPH SPA");
+		mail.setContent("Ciao " + ordine.getNome() + "!<br>Grazie dell'ordine <b>(ID "+ordine.getId()+")</b> "+ "effettuato presso SILPH SPA.<br>Un addetto prenderà al più presto l'ordine in carico.<br>Cordiali saluti");
+
+		emailService.sendSimpleMessage(mail);
+
 	}
 
 }

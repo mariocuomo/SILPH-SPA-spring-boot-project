@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -12,6 +13,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,11 +32,13 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import it.uniroma3.siw.demospring.model.Album;
 import it.uniroma3.siw.demospring.model.Fotografia;
 import it.uniroma3.siw.demospring.model.Fotografo;
+import it.uniroma3.siw.demospring.model.Mail;
 import it.uniroma3.siw.demospring.model.Ordine;
 import it.uniroma3.siw.demospring.model.RigaOrdine;
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
 import it.uniroma3.siw.demospring.services.AlbumValidator;
+import it.uniroma3.siw.demospring.services.EmailService;
 import it.uniroma3.siw.demospring.services.FotografiaService;
 import it.uniroma3.siw.demospring.services.FotografiaValidator;
 import it.uniroma3.siw.demospring.services.FotografoService;
@@ -81,6 +85,8 @@ public class MainController {
 	@Autowired
 	private AmazonS3 amazonS3Client;
 
+
+
 	private void uploadFileToS3bucket(String fileName, File file, String bucketName) {
 		amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
 	}
@@ -111,7 +117,7 @@ public class MainController {
 
 
 	@RequestMapping(value="/entra", method=RequestMethod.GET)
-	public String entra(Model model, @RequestParam(defaultValue = "nulla") String action) {
+	public String entra(Model model, @RequestParam(defaultValue = "nulla") String action) throws MessagingException {
 		String prossimaVista="index.html";
 		if( action.equals("visitatore") )
 			prossimaVista = "scelta.html";
@@ -189,7 +195,13 @@ public class MainController {
 				List<RigaOrdine> righeOrdine = service.creaRigheOrdine(selezionate);
 				ordine.setRigheOrdine(righeOrdine);
 				ordineService.salva(ordine);
+				try {
+					service.inviaMail(ordine);
+				} catch (MessagingException e) {
+					return "fineOrdine";
+				}					
 				return "fineOrdine";
+
 			}
 		}
 	}
@@ -319,8 +331,6 @@ public class MainController {
 			fotografia.setLink("https://i1.wp.com/www.cybercloud.guru/wp-content/uploads/2018/03/s3.png");
 			fotografiaService.salva(fotografia);
 
-
-			/****codice per salvare su storage****/
 			File convFile = new File(file.getOriginalFilename());
 			try {
 				file.transferTo(convFile);
@@ -328,9 +338,14 @@ public class MainController {
 				return "erroreFile.html";
 			}
 
-			this.uploadFileToS3bucket("siw-bucket", convFile, "prova");
+			this.uploadFileToS3bucket("siw-bucket", convFile, fotografia.getNome()+".jpg");
+			String link=amazonS3Client.getUrl("siw-bucket", fotografia.getNome()+".jpg").toString();
+			fotografia.setLink(link);
+
+			fotografiaService.salva(fotografia);
 
 			return "fineOperazione.html";
+
 		}
 	}
 }
