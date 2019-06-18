@@ -44,6 +44,7 @@ import it.uniroma3.siw.demospring.model.Studente;
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
 import it.uniroma3.siw.demospring.services.AlbumValidator;
+import it.uniroma3.siw.demospring.services.DbPopulation;
 import it.uniroma3.siw.demospring.services.FotografiaService;
 import it.uniroma3.siw.demospring.services.FotografiaValidator;
 import it.uniroma3.siw.demospring.services.FotografoService;
@@ -90,8 +91,6 @@ public class MainController {
 	List<Fotografia> selezionate;
 
 
-
-
 	@Autowired
 	private AmazonS3 amazonS3Client;
 
@@ -126,91 +125,15 @@ public class MainController {
 
 	@RequestMapping(value="/entra", method=RequestMethod.GET)
 	public String entra(Model model, @RequestParam(defaultValue = "nulla") String action) {
-		if( action.equals("nulla") )
-			return "index.html";
-
+		String prossimaVista="index.html";
 		if( action.equals("visitatore") )
-			return "scelta.html";
-		else if( action.equals("admin")) {
+			prossimaVista = "scelta.html";
+		if( action.equals("admin")) {
 			model.addAttribute("user",new User());
-			return "login.html";
+			prossimaVista = "login.html";
 		}
-		else {
-			User user1 = new User();
-			user1.setUsername("mario");
-			user1.setPassword("mariopassword");
-
-			User user2 = new User();
-			user2.setUsername("francesca");
-			user2.setPassword("francescapassword");
-
-			Fotografo fotografo1 = new Fotografo();
-			fotografo1.setNome("Mario");
-			fotografo1.setCognome("Cuomo");
-
-			Fotografo fotografo2 = new Fotografo();
-			fotografo2.setNome("Francesca");
-			fotografo2.setCognome("Leone");
-
-			Album album1 = new Album();
-			album1.setNome("raggisolari");
-			album1.setDescrizione("una raccolta di foto raggianti");
-			Album album2 = new Album();
-			album2.setNome("altamarea");
-			album2.setDescrizione("l'altamarea come l'umore");
-			album1.setFotografo(fotografo1);
-			album2.setFotografo(fotografo1);
-
-			Album album3 = new Album();
-			album3.setNome("tuttoinfiore");
-			album3.setDescrizione("fiori di campagna");
-			Album album4 = new Album();
-			album4.setNome("rumorecittadino");
-			album4.setDescrizione("linea tra silenzio e rumore");
-			album3.setFotografo(fotografo2);
-			album4.setFotografo(fotografo2);
-
-
-			Fotografia fotografia1 = new Fotografia();
-			fotografia1.setNome("raggioincollina");
-			fotografia1.setDescrizione("un raggio raggiante");
-			fotografia1.setFotografo(fotografo1);
-			fotografia1.setAlbum(album1);
-			fotografia1.setLink("https://i0.wp.com/fondazionenenni.blog/wp-content/uploads/2019/04/raggio-di-sole.jpg");
-			Fotografia fotografia2 = new Fotografia();
-			fotografia2.setNome("raggioinforesta");
-			fotografia2.setDescrizione("un raggio raggiante 2");
-			fotografia2.setFotografo(fotografo1);
-			fotografia2.setAlbum(album1);
-			fotografia2.setLink("https://cdn.pixabay.com/photo/2017/11/10/10/34/forest-2935923_960_720.jpg");
-			Fotografia fotografia3 = new Fotografia();
-			fotografia3.setNome("mareaescogli");
-			fotografia3.setDescrizione("onda che si infrange");
-			fotografia3.setFotografo(fotografo1);
-			fotografia3.setAlbum(album2);
-			fotografia3.setLink("http://www.passionepesce.it/wp-content/uploads/sites/3/2013/05/Alta-marea-a23728111.jpg");
-			Fotografia fotografia4 = new Fotografia();
-			fotografia4.setNome("saintMichel");
-			fotografia4.setDescrizione("la calma prima della tempesta");
-			fotografia4.setFotografo(fotografo1);
-			fotografia4.setAlbum(album2);
-			fotografia4.setLink("https://www.presidentformaggi.it/sites/default/files/styles/immagine_gallery/public/Mont%20Saint%20Michelle%20e%20le%20sue%20Specialita_V2mod.jpg");
-
-			fotografoService.salva(fotografo1);
-			fotografoService.salva(fotografo2);
-			albumService.salva(album1);
-			albumService.salva(album2);
-			albumService.salva(album3);
-			albumService.salva(album4);
-			fotografiaService.salva(fotografia1);
-			fotografiaService.salva(fotografia2);
-			fotografiaService.salva(fotografia3);
-			fotografiaService.salva(fotografia4);
-
-			userService.salva(user1);
-			userService.salva(user2);
-			return "index.html";
-		}
+		
+		return prossimaVista;
 	}
 
 	@RequestMapping(value="/fotografi", method=RequestMethod.GET)	
