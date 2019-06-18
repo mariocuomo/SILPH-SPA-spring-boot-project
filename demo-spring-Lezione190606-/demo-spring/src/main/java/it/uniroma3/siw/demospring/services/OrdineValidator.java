@@ -5,7 +5,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import it.uniroma3.siw.demospring.model.Fotografo;
 import it.uniroma3.siw.demospring.model.Ordine;
 
 @Component

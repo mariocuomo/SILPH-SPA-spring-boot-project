@@ -2,28 +2,20 @@ package it.uniroma3.siw.demospring.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
-import org.omg.CORBA.portable.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -40,21 +31,16 @@ import it.uniroma3.siw.demospring.model.Fotografia;
 import it.uniroma3.siw.demospring.model.Fotografo;
 import it.uniroma3.siw.demospring.model.Ordine;
 import it.uniroma3.siw.demospring.model.RigaOrdine;
-import it.uniroma3.siw.demospring.model.Studente;
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.services.AlbumService;
 import it.uniroma3.siw.demospring.services.AlbumValidator;
-import it.uniroma3.siw.demospring.services.DbPopulation;
 import it.uniroma3.siw.demospring.services.FotografiaService;
 import it.uniroma3.siw.demospring.services.FotografiaValidator;
 import it.uniroma3.siw.demospring.services.FotografoService;
 import it.uniroma3.siw.demospring.services.FotografoValidator;
 import it.uniroma3.siw.demospring.services.OrdineService;
 import it.uniroma3.siw.demospring.services.OrdineValidator;
-import it.uniroma3.siw.demospring.services.StudenteService;
-import it.uniroma3.siw.demospring.services.StudenteValidator;
 import it.uniroma3.siw.demospring.services.UserService;
-//import it.uniroma3.siw.demospring.services.UserService;
 import it.uniroma3.siw.demospring.services.Service;
 
 
@@ -300,7 +286,6 @@ public class MainController {
 			model.addAttribute("fotografia",fotografia);
 			return "uploadFoto.html";
 		}else {
-			//damodificare
 			model.addAttribute("fotografi", this.fotografoService.tutti());
 			return "albums.html";
 		}
@@ -329,8 +314,6 @@ public class MainController {
 			} catch (IOException e1) {
 				return "erroreFile.html";
 			}
-
-			convFile.getPath();
 			
 			this.uploadFileToS3bucket("siw-bucket", convFile, "prova");
 

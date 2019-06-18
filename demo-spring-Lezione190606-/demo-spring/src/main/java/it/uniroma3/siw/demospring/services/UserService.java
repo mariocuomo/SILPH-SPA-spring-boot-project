@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import it.uniroma3.siw.demospring.model.User;
 import it.uniroma3.siw.demospring.repository.UserRepository;
@@ -22,7 +21,6 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByUsername(username);
-		int a = 0;
 		if (user == null) {
 			throw new UsernameNotFoundException("Username not found");
 		}

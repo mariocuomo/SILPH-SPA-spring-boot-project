@@ -7,9 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.uniroma3.siw.demospring.model.Fotografo;
 import it.uniroma3.siw.demospring.model.Ordine;
-import it.uniroma3.siw.demospring.repository.FotografoRepository;
 import it.uniroma3.siw.demospring.repository.OrdineRepository;
 
 @Service

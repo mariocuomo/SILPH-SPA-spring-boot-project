@@ -6,7 +6,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import it.uniroma3.siw.demospring.model.Album;
-import it.uniroma3.siw.demospring.model.Studente;
 
 
 @Component 

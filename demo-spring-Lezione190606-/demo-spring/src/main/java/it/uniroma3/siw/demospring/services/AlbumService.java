@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.demospring.model.Album;
-import it.uniroma3.siw.demospring.model.Fotografia;
 import it.uniroma3.siw.demospring.repository.AlbumRepository;
-import it.uniroma3.siw.demospring.repository.FotografiaRepository;
 
 @Service
 public class AlbumService{
