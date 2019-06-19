@@ -1,6 +1,7 @@
 package it.uniroma3.siw.demospring.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,11 @@ public class MainController {
 	public String getFotografo(@PathVariable ("id") Long id, Model model) {
 		if(id!=null) {			
 			List<Album> albums = service.albumDiArtista(albumService.tutti(), id);
+			if(albums.size()==0) {
+				Fotografo fotografo = fotografoService.FotografoPerId(id);
+				model.addAttribute("fotografo",fotografo);
+				return "noAlbum.html";
+			}
 			model.addAttribute("fotografo", this.fotografoService.FotografoPerId(id));
 			model.addAttribute("albums", albums);
 			return "fotografo.html";
@@ -328,14 +334,14 @@ public class MainController {
 			fotografia.setAlbum(this.fotografia.getAlbum());
 			fotografia.setLink("https://i1.wp.com/www.cybercloud.guru/wp-content/uploads/2018/03/s3.png");
 			fotografiaService.salva(fotografia);
-
-			File convFile = new File(file.getOriginalFilename());
+			
+			File convFile = null;
 			try {
-				file.transferTo(convFile);
-			} catch (IOException e1) {
-				return "erroreFile.html";
+				convFile = this.convertMultiPartToFile(file);
+			} catch (IOException e) {
+				return "erroreCaricamento.html";
 			}
-
+			
 			this.uploadFileToS3bucket("it.siw.uniroma3.cuomo", convFile, fotografia.getNome()+".jpg");
 			String link=amazonS3Client.getUrl("it.siw.uniroma3.cuomo", fotografia.getNome()+".jpg").toString();
 			fotografia.setLink(link);
@@ -345,6 +351,14 @@ public class MainController {
 			return "fineOperazione.html";
 
 		}
+	}
+	
+	private File convertMultiPartToFile(MultipartFile file) throws IOException {
+	    File convFile = new File(file.getOriginalFilename());
+	    FileOutputStream fos = new FileOutputStream(convFile);
+	    fos.write(file.getBytes());
+	    fos.close();
+	    return convFile;
 	}
 }
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/html">
+
+<head>
+<link href="../static/css/aggiungiInfoOrdine.css"
+	th:href="@{/css/aggiungiInfoOrdine.css}" rel="stylesheet" />
+<meta charset="utf-8">
+
+</head>
+<body>
+	<div align="center">
+		<div align="center">
+			<img style="padding-top: 5%" src="../images/errore.png"
+				width="250" />
+		</div>
+		<h1>Opss...</h1>
+		<div>
+			Il fotografo <span th:text="${fotografo.cognome}"> non ha
+				album </span>
+		</div>
+		<div align="center">
+			<form th:action="@{/fotografi}" method="get">
+				<table>
+					<tr>
+						<td align="center">
+							<button class="dropbtn" type="submit">Fotografi</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+
+		</div>
+	</div>
+</body>
+</html>
