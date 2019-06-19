@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -84,7 +85,7 @@ public class MainController {
 
 
 
-	private void uploadFileToS3bucket(String fileName, File file, String bucketName) {
+	private void uploadFileToS3bucket(String bucketName, File file, String fileName) {
 		amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
 	}
 
@@ -95,7 +96,7 @@ public class MainController {
 		return AmazonS3ClientBuilder
 				.standard()
 				.withCredentials(credentialsProvider)
-				.withRegion(region)
+				.withRegion(Regions.EU_CENTRAL_1)
 				.build();
 	}
 
@@ -296,7 +297,6 @@ public class MainController {
 			model.addAttribute("albums", albums);
 			return "albumUploadFoto.html";
 		}else {
-			//damodificare
 			model.addAttribute("fotografi", this.fotografoService.tutti());
 			return "fotografi.html";
 		}
@@ -336,8 +336,8 @@ public class MainController {
 				return "erroreFile.html";
 			}
 
-			this.uploadFileToS3bucket("siw-bucket", convFile, fotografia.getNome()+".jpg");
-			String link=amazonS3Client.getUrl("siw-bucket", fotografia.getNome()+".jpg").toString();
+			this.uploadFileToS3bucket("it.siw.uniroma3.cuomo", convFile, fotografia.getNome()+".jpg");
+			String link=amazonS3Client.getUrl("it.siw.uniroma3.cuomo", fotografia.getNome()+".jpg").toString();
 			fotografia.setLink(link);
 
 			fotografiaService.salva(fotografia);
