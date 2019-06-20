@@ -72,7 +72,7 @@ public class Service {
 
 	public void inviaMail(Ordine ordine) throws MessagingException {
 		Mail mail = new Mail();
-		mail.setFrom("progettosiplhspa@hotmail.com");
+		mail.setFrom("silph.spa@hotmail.com");
 		mail.setTo(ordine.getEmail());
 		mail.setSubject("Conferma ordine presso SILPH SPA");
 		mail.setContent("Ciao " + ordine.getNome() + "!<br>Grazie dell'ordine <b>(ID "+ordine.getId()+")</b> "+ "effettuato presso SILPH SPA.<br>Un addetto prenderà al più presto l'ordine in carico.<br>Cordiali saluti");

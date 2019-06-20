@@ -320,6 +320,11 @@ public class MainController {
 		}
 	}
 
+	@RequestMapping(value = "esci", method = RequestMethod.GET)
+	public String esci(Model model) {
+		return "index.html";
+	}
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String uploadFoto(@Valid @ModelAttribute Fotografia fotografia, 
 			Model model, BindingResult bindingResult, 
@@ -332,14 +337,14 @@ public class MainController {
 		else {
 			fotografia.setFotografo(this.fotografia.getFotografo());
 			fotografia.setAlbum(this.fotografia.getAlbum());
-			
+
 			File convFile = null;
 			try {
 				convFile = this.convertMultiPartToFile(file);
 			} catch (IOException e) {
 				return "erroreCaricamento.html";
 			}
-			
+
 			this.uploadFileToS3bucket("it.siw.uniroma3.cuomo", convFile, fotografia.getNome()+".jpg");
 			String link=amazonS3Client.getUrl("it.siw.uniroma3.cuomo", fotografia.getNome()+".jpg").toString();
 			fotografia.setLink(link);
@@ -350,13 +355,13 @@ public class MainController {
 
 		}
 	}
-	
+
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
-	    File convFile = new File(file.getOriginalFilename());
-	    FileOutputStream fos = new FileOutputStream(convFile);
-	    fos.write(file.getBytes());
-	    fos.close();
-	    return convFile;
+		File convFile = new File(file.getOriginalFilename());
+		FileOutputStream fos = new FileOutputStream(convFile);
+		fos.write(file.getBytes());
+		fos.close();
+		return convFile;
 	}
 }
 
