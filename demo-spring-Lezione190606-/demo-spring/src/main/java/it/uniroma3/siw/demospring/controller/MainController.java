@@ -332,8 +332,6 @@ public class MainController {
 		else {
 			fotografia.setFotografo(this.fotografia.getFotografo());
 			fotografia.setAlbum(this.fotografia.getAlbum());
-			fotografia.setLink("https://i1.wp.com/www.cybercloud.guru/wp-content/uploads/2018/03/s3.png");
-			fotografiaService.salva(fotografia);
 			
 			File convFile = null;
 			try {
